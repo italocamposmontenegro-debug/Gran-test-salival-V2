@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#2b0f3a" />
+  <title>Gran Test Integrado de Control Salival</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <noscript>
+    <div class="noscript">
+      Esta aplicación requiere JavaScript habilitado para funcionar.
+    </div>
+  </noscript>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div class="brand-text">
+        <div class="brand-title">Gran Test Integrado de Control Salival</div>
+        <div class="brand-subtitle">Uso clínico interno · Registro 100% local · Sin servidor</div>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <button class="btn btn-ghost" id="btnConfig" type="button">Configuración</button>
+
+      <div class="seg">
+        <span class="seg-label">Modo</span>
+        <button class="seg-btn seg-active" id="modeCompleto" type="button">Completo</button>
+        <button class="seg-btn" id="modeRapido" type="button">Rápido</button>
+      </div>
+
+      <button class="btn btn-ghost" id="btnRevision" type="button">Revisión final</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h1>Evaluaciones</h1>
+          <p class="muted">Los datos se guardan <strong>solo en este dispositivo</strong> (localStorage). Sin nube.</p>
+        </div>
+        <div class="panel-actions">
+          <button class="btn" id="btnNew" type="button">Nueva evaluación</button>
+          <button class="btn btn-gold" id="btnSave" type="button">Guardar</button>
+          <button class="btn btn-ghost" id="btnDuplicate" type="button">Duplicar</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="field">
+          <span class="field-label">Evaluación activa</span>
+          <select id="evalSelect"></select>
+        </label>
+
+        <div class="row-actions">
+          <button class="btn btn-ghost" id="btnLoadDemo" type="button">Cargar demo</button>
+          <button class="btn btn-danger" id="btnWipe" type="button">Borrar datos</button>
+        </div>
+      </div>
+
+      <div class="callout callout-warn">
+        <div class="callout-title">Aviso</div>
+        <div class="callout-body">
+          Esta herramienta apoya el registro clínico interno; <strong>no reemplaza el juicio profesional</strong>.
+          No envía datos a internet. Para eliminar todo, usa “Borrar datos”.
+        </div>
+      </div>
+    </section>
+
+    <section class="wizard">
+      <aside class="steps" id="stepsNav" aria-label="Progreso"></aside>
+
+      <section class="stage">
+        <div class="stage-head">
+          <div>
+            <div class="kicker" id="stepKicker">Sección 0</div>
+            <h2 id="stepTitle">Identificación y Contexto</h2>
+            <p class="muted" id="stepHint">Complete los campos para iniciar.</p>
+          </div>
+          <div class="status" id="stepStatus"></div>
+        </div>
+
+        <div class="stage-body" id="stageBody"></div>
+
+        <div class="stage-foot">
+          <button class="btn btn-ghost" id="btnPrev" type="button">Volver</button>
+          <button class="btn" id="btnNext" type="button">Siguiente</button>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <!-- Drawer Config -->
+  <div class="drawer-backdrop hidden" id="configBackdrop" aria-hidden="true"></div>
+  <aside class="drawer hidden" id="configDrawer" aria-label="Configuración clínica">
+    <div class="drawer-head">
+      <h3>Configuración clínica (local)</h3>
+      <button class="btn btn-ghost" id="btnCloseConfig" type="button">Cerrar</button>
+    </div>
+
+    <div class="drawer-body">
+      <div class="callout callout-info">
+        <div class="callout-title">Importante</div>
+        <div class="callout-body">
+          Cambios de configuración afectan nuevas evaluaciones y el reporte. Se guarda solo en este dispositivo.
+        </div>
+      </div>
+
+      <h4>Ítems DIS (editables)</h4>
+      <div id="disConfigList" class="stack"></div>
+      <button class="btn btn-ghost" id="btnAddDisItem" type="button">+ Agregar ítem DIS</button>
+
+      <hr class="sep"/>
+
+      <h4>Bandas orientativas</h4>
+      <p class="muted">Se usan solo como apoyo. No son puntos de corte universales.</p>
+
+      <div class="grid2">
+        <label class="field">
+          <span class="field-label">DQ5 baja (≤%)</span>
+          <input id="cfg_dq5_low" type="number" min="0" max="100" step="1"/>
+        </label>
+        <label class="field">
+          <span class="field-label">DQ5 leve (≤%)</span>
+          <input id="cfg_dq5_mild" type="number" min="0" max="100" step="1"/>
+        </label>
+        <label class="field">
+          <span class="field-label">DQ5 moderada (≤%)</span>
+          <input id="cfg_dq5_mod" type="number" min="0" max="100" step="1"/>
+        </label>
+
+        <label class="field">
+          <span class="field-label">DIS leve (≤%)</span>
+          <input id="cfg_dis_low" type="number" min="0" max="100" step="1"/>
+        </label>
+        <label class="field">
+          <span class="field-label">DIS moderado (≤%)</span>
+          <input id="cfg_dis_mod" type="number" min="0" max="100" step="1"/>
+        </label>
+      </div>
+
+      <div class="row-actions">
+        <button class="btn btn-gold" id="btnSaveConfig" type="button">Guardar configuración</button>
+        <button class="btn btn-ghost" id="btnResetConfig" type="button">Restaurar por defecto</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Drawer Revisión -->
+  <div class="drawer-backdrop hidden" id="reviewBackdrop" aria-hidden="true"></div>
+  <aside class="drawer hidden" id="reviewDrawer" aria-label="Revisión final">
+    <div class="drawer-head">
+      <h3>Revisión final</h3>
+      <button class="btn btn-ghost" id="btnCloseReview" type="button">Cerrar</button>
+    </div>
+    <div class="drawer-body">
+      <div id="reviewContent"></div>
+      <div class="row-actions">
+        <button class="btn btn-ghost" id="btnCopyReport" type="button">Copiar informe</button>
+        <button class="btn" id="btnExportJSON" type="button">Exportar JSON</button>
+        <button class="btn btn-ghost" id="btnExportCSV" type="button">Exportar CSV</button>
+        <button class="btn btn-gold" id="btnExportPDF" type="button">Exportar PDF</button>
+      </div>
+      <p class="muted small">
+        “Exportar PDF” abre una vista de impresión. En iOS/Android puedes “Guardar como PDF” desde el menú de impresión.
+      </p>
+    </div>
+  </aside>
+
+  <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
