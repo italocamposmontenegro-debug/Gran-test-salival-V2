@@ -1,12 +1,12 @@
-const CACHE_NAME = 'gtcs-cache-v2';
+const CACHE_NAME = 'gtcs-cache-v3';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
   './app.js',
   './manifest.json',
-  './icons/icon-192.png',
-  './icons/icon-512.png'
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
