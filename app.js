@@ -1935,7 +1935,7 @@
     if (!('serviceWorker' in navigator)) return;
     try {
       const cur = localStorage.getItem(KEY_SW_VER);
-      const ver = 'v2';
+      const ver = 'v3';
       if (cur !== ver) {
         // force unregister old SW on major change to avoid stale cache
         const regs = await navigator.serviceWorker.getRegistrations();
